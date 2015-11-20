@@ -7,9 +7,11 @@ import org.shadebob.skineditor.actors.PreviewPane;
 import org.shadebob.skineditor.actors.WidgetsBar;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -20,6 +22,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ObjectMap;
+import com.badlogic.gdx.utils.ObjectMap.Entry;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -160,10 +164,34 @@ public class MainScreen implements Screen {
 		}
 		
 		FileHandle projectFile = projectFolder.child("uiskin.json");
+		
+		
+		
 		FileHandle backupFile = projectFolder.child("backups").child("uiskin_" +(TimeUtils.millis()/1000) +".json");
 		projectFile.copyTo(backupFile);
+		
+		Preferences prefs = Gdx.app.getPreferences("editor_prefs_"+game.screenMain.getcurrentProject());
+		game.skinProject.get("default-font", BitmapFont.class).getData().fontFile = new FileHandle(prefs.getString("font-override", "")+".fnt");
 		game.skinProject.save(projectFile);
 		
+//		
+//		
+//		
+//		ObjectMap<String, BitmapFont> all = game.skinProject.getAll(BitmapFont.class);
+//		for (Entry<String	, BitmapFont> entry : all) {
+//			System.out.println("loaded : "+entry.key+" =>"+entry.value);
+//			
+//		}
+		
+		//TODO tutaj trzeba podmienic plik , sciezke w foncie na odpowiedni 
+		System.out.println(game.skinProject.get("default-font", BitmapFont.class).getData().fontFile.path());
+//		game.skinProject.remove("default-font", BitmapFont.class);
+//		BitmapFont font = new BitmapFont(fontFile, imageFile, flip)
+		//TODO FONT PILNE WAZNE , to dziala , 
+//		Preferences prefs = Gdx.app.getPreferences("editor_prefs_"+game.screenMain.getcurrentProject());
+//		game.skinProject.get("default-font", BitmapFont.class).getData().fontFile = new FileHandle(prefs.getString("font-override", "")+".fnt");
+//		
+//		
 	}
 	
 	/**

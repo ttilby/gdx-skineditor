@@ -16,10 +16,17 @@
 package org.shadebob.skineditor;
 
 import java.util.Iterator;
+import java.util.Properties;
 
+import org.shadebob.skineditor.screens.MainScreen;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
@@ -102,7 +109,7 @@ public class FontPickerDialog extends Dialog {
 		tableFonts.add(new Label("Value", game.skin, "title")).colspan(3).left().width(60).padRight(50).expandX().fillX();
 
 		tableFonts.row();
-
+		Preferences prefs = Gdx.app.getPreferences("editor_prefs_"+game.screenMain.getcurrentProject());
 		Iterator<String> it = fonts.keys().iterator();
 		while (it.hasNext()) {
 			final String key = it.next();
@@ -189,14 +196,21 @@ public class FontPickerDialog extends Dialog {
 
 			});
 			
-			TextButton buttonSetAsDefault = new TextButton("Set as default-font", game.skin);
+			final TextButton buttonSetAsDefault = new TextButton("mark Default", game.skin);
 			buttonSetAsDefault.addListener(new ChangeListener() {
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {
-					FileHandle targetFont = new FileHandle(SkinEditorGame.getProjectsDirectory().child(game.screenMain.getcurrentProject()).child(key+".fnt").file());// + "/" +key + ".fnt");
-					FileHandle targetImage = new FileHandle(SkinEditorGame.getProjectsDirectory().child(game.screenMain.getcurrentProject()).child("assets").child(key+ ".png").file());
-					targetFont.copyTo(targetFont.parent().child("default.fnt"));
-					targetImage.copyTo(targetImage.parent().child("default.png"));
+					//wszystkie poza defaultem 
+//					FileHandle targetFont = new FileHandle(SkinEditorGame.getProjectsDirectory().child(game.screenMain.getcurrentProject()).child(key+".fnt").file());// + "/" +key + ".fnt");
+//					FileHandle targetImage = new FileHandle(SkinEditorGame.getProjectsDirectory().child(game.screenMain.getcurrentProject()).child("assets").child(key+ ".png").file());
+//					targetFont.copyTo(targetFont.parent().child("default.fnt"));	
+//					targetImage.copyTo(targetImage.parent().child("default.png"));
+					//TODO 
+					
+					FileHandle projectDirectory = SkinEditorGame.getProjectsDirectory().child(game.screenMain.getcurrentProject());
+					Preferences prefs = Gdx.app.getPreferences("editor_prefs_"+game.screenMain.getcurrentProject());
+					prefs.putString("font-override", key);
+					prefs.flush();
 				}
 
 			});
@@ -206,8 +220,18 @@ public class FontPickerDialog extends Dialog {
 			if (field != null) {
 				tableFonts.add(buttonSelect).left();
 			}
+			if (key.equalsIgnoreCase("default-font")) {
+				tableFonts.add("").left();
+			} else {
+				tableFonts.add(buttonSetAsDefault).left();
+			}
+			
+			String rs = (prefs.getString("font-override", ""));
+			if (rs.equalsIgnoreCase(key)) {
+				buttonSetAsDefault.setColor(0, 1, 0, 1);
+				
+			}
 			tableFonts.add(buttonRemove).left();
-			tableFonts.add(buttonSetAsDefault).left();
 			tableFonts.row();
 		}
 
