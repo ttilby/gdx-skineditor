@@ -208,8 +208,8 @@ public class NewFontDialog extends Dialog {
 				FileHandle handleFont = new FileHandle(System.getProperty("java.io.tmpdir")).child(textFontName.getText() + ".fnt");
 				FileHandle handleImage = new FileHandle(System.getProperty("java.io.tmpdir")).child(textFontName.getText() + ".png");
 				
-				FileHandle targetFont = new FileHandle("projects/" + game.screenMain.getcurrentProject() + "/" + textFontName.getText() + ".fnt");
-				FileHandle targetImage = new FileHandle("projects/" + game.screenMain.getcurrentProject() + "/assets/" + textFontName.getText() + ".png");
+				FileHandle targetFont = new FileHandle(SkinEditorGame.getProjectsDirectory().child(game.screenMain.getcurrentProject()).path() + "/" + textFontName.getText() + ".fnt");
+				FileHandle targetImage = new FileHandle(SkinEditorGame.getProjectsDirectory().child(game.screenMain.getcurrentProject()).child("assets").child( textFontName.getText() + ".png").file());
 				
 				if ((targetFont.exists() == true) || (targetImage.exists() == true)) {
 					
@@ -217,7 +217,9 @@ public class NewFontDialog extends Dialog {
 					return;
 				}
 				
+				System.out.println("copy font fnt to project dir "+handleFont+" =>>"+targetFont);
 				handleFont.copyTo(targetFont);
+				System.out.println("copy font image to project dir "+handleImage+" =>>"+targetImage);
 				handleImage.copyTo(targetImage);
 				
 				game.skinProject.add(textFontName.getText(), new BitmapFont(targetFont, targetImage, false));
@@ -305,19 +307,23 @@ public class NewFontDialog extends Dialog {
 			BMFontUtil bfu = new BMFontUtil(unicodeFont);
 			
 			
-			FileHandle handle = new FileHandle(System.getProperty("java.io.tmpdir")).child(newFontName);
-			FileHandle handleFont = new FileHandle(handle.file().getAbsolutePath() + ".fnt");
-			bfu.save(handle.file());
-		
+			FileHandle handle = new FileHandle(System.getProperty("java.io.tmpdir")).child(newFontName+".fnt");
+			FileHandle handleFont = new FileHandle(System.getProperty("java.io.tmpdir")).child(newFontName+".fnt");//handle.file().getAbsolutePath() + ".fnt");
 			FileHandle handleImage = new FileHandle(System.getProperty("java.io.tmpdir")).child(newFontName + ".png");
 			
+//			System.out.println("TEMPORARY FILE IS handle "+handle);
+			bfu.save(handle.file());
+		
 			TextField.TextFieldStyle textStyle = new TextField.TextFieldStyle();
 			textStyle.cursor = game.skin.getDrawable("cursor");
 	    	textStyle.selection = game.skin.getDrawable("selection");
 			textStyle.background = game.skin.getDrawable("textfield");
 			textStyle.fontColor = Color.YELLOW;
-			textStyle.font = new BitmapFont(handleFont, handleImage, false);
 			
+			
+			System.out.println("TEMPORARY FILE IS handleFont "+handleFont+" exists="+handleFont.exists());
+			System.out.println("TEMPORARY FILE IS handleImage "+handleImage+" exists="+handleImage.exists());
+			textStyle.font = new BitmapFont(handleFont, handleImage, false);
 			textFontPreview.setStyle(textStyle);
 			
 			// Have to do this to force clipping of font

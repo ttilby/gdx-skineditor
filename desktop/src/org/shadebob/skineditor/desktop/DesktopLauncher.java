@@ -50,10 +50,10 @@ public class DesktopLauncher {
 		config.width = 1024;
 		config.height = 768;
 		config.resizable = true;
-		config.title = "Skin Editor for libGDX (v0.3)";
+		config.title = "Skin Editor for libGDX (v0.3.1)";
 		config.backgroundFPS = 1;
 		config.vSyncEnabled = true;
 		
-		new LwjglApplication(new SkinEditorGame(), config);
+		new LwjglApplication(new SkinEditorGame(arg), config);
 	}
 }

@@ -30,6 +30,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.esotericsoftware.tablelayout.Cell;
 
 public class NinePatchEditorDialog extends Dialog {
@@ -88,7 +89,7 @@ public class NinePatchEditorDialog extends Dialog {
 		tableTop.add(textName).padRight(10);
 		tableTop.add("Source Image:").padRight(10);
 		
-		textSourceImage = new TextField("resources/default_button.png", game.skin);
+		textSourceImage = new TextField(SkinEditorGame.getWorkingDirectory().parent().child("assets").child("resources").child("default_button.png").path(), game.skin);
 		textSourceImage.setDisabled(true);
 		tableTop.add(textSourceImage).expandX().fill().padRight(10);
 		
@@ -231,7 +232,7 @@ public class NinePatchEditorDialog extends Dialog {
 				}
 				
 				
-				FileHandle targetImage = new FileHandle("projects/" + game.screenMain.getcurrentProject() + "/assets/" + textName.getText() + ".9.png");
+				FileHandle targetImage = SkinEditorGame.getProjectsDirectory().child(game.screenMain.getcurrentProject()).child("assets").child(textName.getText() + ".9.png");
 				
 				if (targetImage.exists() == true) {
 					

@@ -154,7 +154,7 @@ public class DrawablePickerDialog extends Dialog {
 
 						// Copy the file
 						FileHandle orig = new FileHandle(selectedFile);
-						FileHandle dest = new FileHandle("projects/" + game.screenMain.getcurrentProject() + "/assets/" + resourceName + "." + ext);
+						FileHandle dest = SkinEditorGame.getProjectsDirectory().child(game.screenMain.getcurrentProject()).child("assets").child(resourceName + "." + ext);
 						orig.copyTo(dest);
 
 						
@@ -308,7 +308,8 @@ public class DrawablePickerDialog extends Dialog {
 						} else {
 							
 							boolean ninepatch = false;
-							FileHandle test = new FileHandle("projects/" + game.screenMain.getcurrentProject() + "/assets/" + key + ".9.png");
+							FileHandle test = SkinEditorGame.getProjectsDirectory().child(game.screenMain.getcurrentProject()).child("assets").child(key + ".9.png");
+							
 							if (test.exists() == true) {
 								ninepatch = true;
 							}

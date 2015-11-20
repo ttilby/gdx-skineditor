@@ -141,7 +141,7 @@ public class MainScreen implements Screen {
 	 */
 	public void saveToSkin() {
 
-		FileHandle projectFolder = Gdx.files.local("projects").child(currentProject);
+		FileHandle projectFolder = SkinEditorGame.getProjectsDirectory().child(currentProject);
 		
 		FileHandle[] items = projectFolder.child("backups").list();
 		Array<String> sortedItems = new Array<String>();
@@ -175,17 +175,16 @@ public class MainScreen implements Screen {
 		settings.combineSubdirectories = true;
 		settings.maxWidth = 2048;
 		settings.maxHeight = 2048;
-		TexturePacker.process(settings, "projects/" + currentProject +"/assets/", "projects/" + currentProject, "uiskin");
+		TexturePacker.process(settings, SkinEditorGame.getProjectsDirectory().child(currentProject).child("assets").path(), SkinEditorGame.getProjectsDirectory().child(currentProject).path(), "uiskin");
 		
-
 		// Load project skin
 		if (game.skinProject != null) {
 			game.skinProject.dispose();
 		}
 		
 		game.skinProject = new Skin();
-		game.skinProject.addRegions(new TextureAtlas(Gdx.files.local("projects/" + currentProject +"/uiskin.atlas")));
-		game.skinProject.load(Gdx.files.local("projects/" + currentProject +"/uiskin.json"));
+		game.skinProject.addRegions(new TextureAtlas(SkinEditorGame.getProjectsDirectory().child(currentProject).child("uiskin.atlas")));
+		game.skinProject.load(SkinEditorGame.getProjectsDirectory().child(currentProject).child("uiskin.json"));
 
 		
 	}

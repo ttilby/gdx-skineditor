@@ -217,7 +217,7 @@ public class WelcomeScreen implements Screen {
 
 		Array<String> items = new Array<String>();
 
-		FileHandle[] projects = Gdx.files.local("projects").list();
+		FileHandle[] projects = SkinEditorGame.getProjectsDirectory().list();
 		for (FileHandle project : projects) {
 			if (project.child("uiskin.json").exists() == true) {
 				items.add(project.name());
@@ -233,9 +233,9 @@ public class WelcomeScreen implements Screen {
 	 */
 	public void createProject(String projectName) {
 
-		FileHandle projectFolder = Gdx.files.local("projects").child(projectName);
+		FileHandle projectFolder =SkinEditorGame.getProjectsDirectory().child(projectName);
 		if (projectFolder.exists() == true) {
-			game.showNotice("Error", "Project name already in use!", stage);
+			game.showNotice("Error", "Project name already in use!\n"+projectFolder, stage);
 			return;
 		}
 
@@ -245,12 +245,20 @@ public class WelcomeScreen implements Screen {
 		game.skin.save(projectFolder.child("uiskin.json"));
 
 		// Copy assets
-		FileHandle assetsFolder = Gdx.files.local("resources/raw");
+		FileHandle assetsFolder = SkinEditorGame.getWorkingDirectory().parent().child("assets").child("resources").child("raw");//Gdx.files.local("resources/raw");
 		assetsFolder.copyTo(projectFolder.child("assets"));
 		// Rebuild from raw resources
 		TexturePacker.Settings settings = new TexturePacker.Settings();
 		settings.combineSubdirectories = true;
-		TexturePacker.process(settings, "projects/" + projectName +"/assets/", "projects/" + projectName, "uiskin");
+		FileHandle input = SkinEditorGame.getProjectsDirectory().child(projectName).child("assets");
+		FileHandle output = SkinEditorGame.getProjectsDirectory().child(projectName);
+		
+		System.out.println("input:"+input);
+		System.out.println("output:"+output);
+		TexturePacker.process(settings, 
+				input.path(),//"projects/" + projectName +"/assets/",;// 
+				output.path(), 
+				"uiskin");
 
 		game.showNotice("Operation completed", "New project successfully created.", stage);
 		
@@ -266,6 +274,8 @@ public class WelcomeScreen implements Screen {
 		
 		Dialog dlgStyle = new Dialog("Delete Project", game.skin) {
 
+			private FileHandle projectFolder;
+
 			@Override
 			protected void result(Object object) {
 				if ((Boolean) object == false) {
@@ -273,7 +283,7 @@ public class WelcomeScreen implements Screen {
 				}
 
 				// We delete it
-				FileHandle projectFolder = Gdx.files.local("projects/" + (String) listProjects.getSelected());
+				  projectFolder = SkinEditorGame.getProjectsDirectory().child((String) listProjects.getSelected());
 				projectFolder.deleteDirectory();
 				
 				refreshProjects();
@@ -283,7 +293,7 @@ public class WelcomeScreen implements Screen {
 
 		dlgStyle.pad(20);
 		dlgStyle.getContentTable().add(
-				"You are sure you want to delete this project?");
+				"You are sure you want to delete this project?\n"+listProjects.getSelected());
 		dlgStyle.button("OK", true);
 		dlgStyle.button("Cancel", false);
 		dlgStyle.key(com.badlogic.gdx.Input.Keys.ENTER, true);

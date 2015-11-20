@@ -15,6 +15,8 @@
  ******************************************************************************/
 package org.shadebob.skineditor;
 
+import java.io.IOException;
+
 import org.shadebob.skineditor.screens.MainScreen;
 import org.shadebob.skineditor.screens.WelcomeScreen;
 
@@ -55,6 +57,34 @@ public class SkinEditorGame extends Game {
 	// Optional check
 	public OptionalChecker opt;
 	
+	
+	private static String projectsRawDir 	= ".skineditor_projects";
+	private static String projectsPath 		= "d:/_test"; //absolute 
+	
+	public SkinEditorGame(String[] arg) {
+//		projectsPath = null;
+	}
+
+	public static FileHandle getProjectsDirectory() {
+		if (projectsPath !=null) {
+			return Gdx.files.absolute(projectsPath).child(projectsRawDir);
+		} else {
+			return Gdx.files.local(SkinEditorGame.projectsRawDir);
+		}
+	}
+	
+	public static FileHandle getWorkingDirectory(){
+		try {
+			String current = new java.io.File( "." ).getCanonicalPath();
+			FileHandle resourceDir = new FileHandle(current);//.parent().child("assets").child("resources");
+			return resourceDir; 
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return Gdx.files.local("/");
+	}
+
 	@Override
 	public void create() {
 		
@@ -64,28 +94,40 @@ public class SkinEditorGame extends Game {
 		fm.refreshFonts();
 		
 		// Create projects folder if not already here
-		FileHandle dirProjects = new FileHandle("projects");
+		
+		FileHandle dirProjects = getProjectsDirectory();
+		System.out.println("project dir is" + dirProjects.path());
 		
 		if (dirProjects.isDirectory() == false) {
 			dirProjects.mkdirs();
 		}
-		
-		// Rebuild from raw resources, kind of overkill, might disable it for production
-		TexturePacker.Settings settings = new TexturePacker.Settings();
-		settings.combineSubdirectories = true;
-		TexturePacker.process(settings, "resources/raw/", ".", "resources/uiskin");
+			String current = getWorkingDirectory().path();
+			System.out.println("Rebuild from raw resources, kind of overkill, might disable it for production");
+			System.out.println("internal path is:" +Gdx.files.internal("/resources"));
+			System.out.println("working dir = "+current);
+			
+			FileHandle resourceDir = new FileHandle(current).parent().child("assets").child("resources");
+			System.out.println("resourceDir  = "+resourceDir);
+			
+			
+			TexturePacker.Settings settings = new TexturePacker.Settings();
+			settings.combineSubdirectories = true;
+			String input = resourceDir.child("raw").path();
+			TexturePacker.process(settings, input, resourceDir.child("uiskin-editor").path(),"uiskin-editor");//"resources/uiskin");
 
-		batch = new SpriteBatch();
-		skin = new Skin();
-		atlas = new TextureAtlas(Gdx.files.internal("resources/uiskin.atlas"));
-		
-		
-		skin.addRegions(new TextureAtlas(Gdx.files.local("resources/uiskin.atlas")));
-		skin.load(Gdx.files.local("resources/uiskin.json"));
-		
-		screenMain = new MainScreen(this);
-		screenWelcome = new WelcomeScreen(this);
-		setScreen(screenWelcome);
+			batch = new SpriteBatch();
+			skin = new Skin();
+			atlas = new TextureAtlas(resourceDir.child("uiskin.atlas"));
+			
+			 
+			skin.addRegions(new TextureAtlas(resourceDir.child("uiskin.atlas")));
+			skin.load(resourceDir.child("uiskin.json"));
+			
+			screenMain = new MainScreen(this);
+			screenWelcome = new WelcomeScreen(this);
+			setScreen(screenWelcome);
+			
+		 
 		
 	}
 	

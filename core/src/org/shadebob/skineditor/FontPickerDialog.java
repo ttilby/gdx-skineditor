@@ -162,8 +162,8 @@ public class FontPickerDialog extends Dialog {
 							} else {
 								
 								// Remove files from disk (fnt and png)
-								FileHandle targetFont = new FileHandle("projects/" + game.screenMain.getcurrentProject() + "/" +key + ".fnt");
-								FileHandle targetImage = new FileHandle("projects/" + game.screenMain.getcurrentProject() + "/assets/" + key + ".png");
+								FileHandle targetFont = SkinEditorGame.getProjectsDirectory().child(game.screenMain.getcurrentProject()).child(key + ".fnt");
+								FileHandle targetImage = SkinEditorGame.getProjectsDirectory().child(game.screenMain.getcurrentProject()).child("assets").child(key + ".png");
 								targetFont.delete();
 								targetImage.delete();
 								
@@ -188,11 +188,26 @@ public class FontPickerDialog extends Dialog {
 				}
 
 			});
+			
+			TextButton buttonSetAsDefault = new TextButton("Set as default-font", game.skin);
+			buttonSetAsDefault.addListener(new ChangeListener() {
+				@Override
+				public void changed(ChangeEvent event, Actor actor) {
+					FileHandle targetFont = new FileHandle(SkinEditorGame.getProjectsDirectory().child(game.screenMain.getcurrentProject()).child(key+".fnt").file());// + "/" +key + ".fnt");
+					FileHandle targetImage = new FileHandle(SkinEditorGame.getProjectsDirectory().child(game.screenMain.getcurrentProject()).child("assets").child(key+ ".png").file());
+					targetFont.copyTo(targetFont.parent().child("default.fnt"));
+					targetImage.copyTo(targetImage.parent().child("default.png"));
+				}
+
+			});
+			
+			
 
 			if (field != null) {
 				tableFonts.add(buttonSelect).left();
 			}
-			tableFonts.add(buttonRemove).left().expandX();
+			tableFonts.add(buttonRemove).left();
+			tableFonts.add(buttonSetAsDefault).left();
 			tableFonts.row();
 		}
 

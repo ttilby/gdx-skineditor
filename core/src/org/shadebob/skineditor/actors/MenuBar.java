@@ -188,7 +188,7 @@ public class MenuBar extends Table {
 					
 					// Copy uiskin.* and *.fnt 
 					
-					FileHandle projectFolder = Gdx.files.local("projects").child(game.screenMain.getcurrentProject());
+					FileHandle projectFolder = SkinEditorGame.getProjectsDirectory().child(game.screenMain.getcurrentProject());
 					System.out.println("folder project is "+projectFolder);
 					System.out.println("target is "+targetDirectory);
 					for(FileHandle file : projectFolder.list()) {
