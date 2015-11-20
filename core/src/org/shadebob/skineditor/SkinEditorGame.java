@@ -120,7 +120,9 @@ public class SkinEditorGame extends Game {
 			System.out.println("Rebuild from raw resources, kind of overkill, might disable it for production");
 			System.out.println("internal path is:" +Gdx.files.internal("/resources"));
 			System.out.println("working dir = "+current);
-			
+
+			System.out.println("Project dir is  = "+projectsPath);
+			System.out.println("Export dir is = "+projectsExportPath);
 			FileHandle resourceDir = new FileHandle(current).parent().child("assets").child("resources");
 			System.out.println("resourceDir  = "+resourceDir);
 			
