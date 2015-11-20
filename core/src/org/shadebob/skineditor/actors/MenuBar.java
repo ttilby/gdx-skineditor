@@ -165,6 +165,11 @@ public class MenuBar extends Table {
 	protected void showExportDialog() {
 		
 		final Preferences prefs = Gdx.app.getPreferences("skin_editor_project_" + game.screenMain.getcurrentProject());
+		
+		if (SkinEditorGame.cmdline) {
+			prefs.putString("export_to_directory", SkinEditorGame.getExportDirectory());
+		}
+		
 		final TextField textDirectory = new TextField(prefs.getString("export_to_directory"),game.skin);
 		
 		Dialog dlg = new Dialog("Export to Directory", game.skin) {

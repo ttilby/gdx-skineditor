@@ -29,6 +29,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
+import com.badlogic.gdx.utils.Array;
 
 
 /**
@@ -56,13 +57,27 @@ public class SkinEditorGame extends Game {
 	
 	// Optional check
 	public OptionalChecker opt;
+
+	public static boolean cmdline;
 	
 	
-	private static String projectsRawDir 	= ".skineditor_projects";
-	private static String projectsPath 		= "d:/_test"; //absolute 
+	private final static String projectsRawDir 	= ".skineditor_projects";
+	private static String projectsPath 		= "c:/"; //absolute 
+	
+	private static String projectsExportPath = null;
 	
 	public SkinEditorGame(String[] arg) {
 //		projectsPath = null;
+		Array<String> arr = new Array<String>(arg);
+		//bo dwa parametry ustalamy
+		if (arr.size==2) {
+			projectsPath = arr.get(0);
+			projectsExportPath = arr.get(1);
+			cmdline = true;
+		} else {
+			
+		}
+		System.out.println("command line arguments : "+arr);
 	}
 
 	public static FileHandle getProjectsDirectory() {
@@ -144,6 +159,10 @@ public class SkinEditorGame extends Game {
 		dlg.key(com.badlogic.gdx.Input.Keys.ENTER, true);
 		dlg.key(com.badlogic.gdx.Input.Keys.ESCAPE, false);
 		dlg.show(stage);
+	}
+
+	public static String getExportDirectory() {
+		return projectsExportPath;
 	}
 	
 }

@@ -7,11 +7,17 @@ project.ext.mainClassName = "org.shadebob.skineditor.desktop.DesktopLauncher"
 project.ext.assetsDir = new File("../assets");
 
 task run(dependsOn: classes, type: JavaExec) {
+
+ 	if(project.hasProperty('myargs')){
+        args(myargs.split(','))
+    }
+
     main = project.mainClassName
     classpath = sourceSets.main.runtimeClasspath
     standardInput = System.in
     workingDir = project.assetsDir
     ignoreExitValue = true
+    description = 'Args [%1 = projectWorkingDir,%2 = projectExportDir]' 
 }
 
 task dist(type: Jar) {

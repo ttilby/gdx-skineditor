@@ -62,6 +62,7 @@ public class WelcomeScreen implements Screen {
 		Table tableContent = new Table(game.skin);
 		tableContent.left();
 		tableContent.add(new Label("Project List", game.skin, "title")).left().row();
+		tableContent.add(new Label("[gray]working dir\n"+SkinEditorGame.getProjectsDirectory(), game.skin, "title")).left().row();
 		listProjects = new List<String>(game.skin);
 		ScrollPane scrollPane = new ScrollPane(listProjects, game.skin);
 		tableContent.add(scrollPane).width(320).height(200).row();
