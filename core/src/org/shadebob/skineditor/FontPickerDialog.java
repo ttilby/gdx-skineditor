@@ -226,7 +226,7 @@ public class FontPickerDialog extends Dialog {
 				tableFonts.add(buttonSetAsDefault).left();
 			}
 			
-			String rs = (prefs.getString("font-override", ""));
+			String rs = (prefs.getString("font-override", "default.fnt"));
 			if (rs.equalsIgnoreCase(key)) {
 				buttonSetAsDefault.setColor(0, 1, 0, 1);
 				

@@ -171,9 +171,11 @@ public class MainScreen implements Screen {
 		projectFile.copyTo(backupFile);
 		
 		Preferences prefs = Gdx.app.getPreferences("editor_prefs_"+game.screenMain.getcurrentProject());
-		game.skinProject.get("default-font", BitmapFont.class).getData().fontFile = new FileHandle(prefs.getString("font-override", "")+".fnt");
+		FileHandle fh = new FileHandle(prefs.getString("font-override", "default")+".fnt");
+		if (fh.exists()) {
+			game.skinProject.get("default-font", BitmapFont.class).getData().fontFile = fh;
+		}
 		game.skinProject.save(projectFile);
-		
 //		
 //		
 //		
