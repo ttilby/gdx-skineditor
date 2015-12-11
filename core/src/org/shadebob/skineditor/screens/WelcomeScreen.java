@@ -243,7 +243,7 @@ public class WelcomeScreen implements Screen {
 		projectFolder.mkdirs();
 		projectFolder.child("assets").mkdirs();
 		projectFolder.child("backups").mkdirs();
-		game.skin.save(projectFolder.child("uiskin.json"));
+		game.skin.save(projectFolder.child("uiskin.json"),projectFolder);
 
 		// Copy assets
 		FileHandle assetsFolder = SkinEditorGame.getWorkingDirectory().parent().child("assets").child("resources").child("raw");//Gdx.files.local("resources/raw");

@@ -34,6 +34,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Field;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -109,7 +110,7 @@ public class FontPickerDialog extends Dialog {
 		tableFonts.add(new Label("Value", game.skin, "title")).colspan(3).left().width(60).padRight(50).expandX().fillX();
 
 		tableFonts.row();
-		Preferences prefs = Gdx.app.getPreferences("editor_prefs_"+game.screenMain.getcurrentProject());
+//		Preferences prefs = Gdx.app.getPreferences("editor_prefs_"+game.screenMain.getcurrentProject());
 		Iterator<String> it = fonts.keys().iterator();
 		while (it.hasNext()) {
 			final String key = it.next();
@@ -208,9 +209,14 @@ public class FontPickerDialog extends Dialog {
 					//TODO 
 					
 					FileHandle projectDirectory = SkinEditorGame.getProjectsDirectory().child(game.screenMain.getcurrentProject());
-					Preferences prefs = Gdx.app.getPreferences("editor_prefs_"+game.screenMain.getcurrentProject());
-					prefs.putString("font-override", key);
-					prefs.flush();
+//					Preferences prefs = Gdx.app.getPreferences("editor_prefs_"+game.screenMain.getcurrentProject());
+//					prefs.putString("font-override", key);
+//					prefs.flush();
+					FileHandle settingsFile = projectDirectory.child("uiskin.settings");
+					settingsFile.writeString(key,false);
+					buttonSetAsDefault.setColor(0, 1, 0, 1);
+					game.screenMain.saveToSkin();
+					
 				}
 
 			});
@@ -226,10 +232,14 @@ public class FontPickerDialog extends Dialog {
 				tableFonts.add(buttonSetAsDefault).left();
 			}
 			
-			String rs = (prefs.getString("font-override", "default.fnt"));
-			if (rs.equalsIgnoreCase(key)) {
+			FileHandle projectDirectory = SkinEditorGame.getProjectsDirectory().child(game.screenMain.getcurrentProject());
+			FileHandle settingsFile = projectDirectory.child("uiskin.settings");
+			
+//			String rs = (prefs.getString("font-override", "default.fnt"));
+			if (!settingsFile.exists()) settingsFile.writeString("default", false);
+			if (settingsFile.readString().equalsIgnoreCase(key)) {
 				buttonSetAsDefault.setColor(0, 1, 0, 1);
-				
+//				
 			}
 			tableFonts.add(buttonRemove).left();
 			tableFonts.row();

@@ -123,7 +123,7 @@ public class Skin implements Disposable {
 	}
 
 	/** Store all resources in the specified skin JSON file. */
-	public boolean save(FileHandle skinFile) {
+	public boolean save(FileHandle skinFile,FileHandle projectFolder) {
 
 		StringWriter jsonText = new StringWriter();
 		JsonWriter writer = new JsonWriter(jsonText);
@@ -140,6 +140,10 @@ public class Skin implements Disposable {
 //				
 //			}
 //		}
+		
+		//settings file 
+		FileHandle settingsFile = projectFolder.child("uiskin.settings");
+		
 		
 		// Sort items
 		Array<Class> items = new Array<Class>();

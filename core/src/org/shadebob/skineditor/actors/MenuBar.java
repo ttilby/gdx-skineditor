@@ -192,15 +192,28 @@ public class MenuBar extends Table {
 					}
 					
 					// Copy uiskin.* and *.fnt 
-					
 					FileHandle projectFolder = SkinEditorGame.getProjectsDirectory().child(game.screenMain.getcurrentProject());
 					System.out.println("folder project is "+projectFolder);
+					FileHandle settingsFile = projectFolder.child("uiskin.settings");
+					if (!settingsFile.exists()) settingsFile.writeString("default-font", false);
 					System.out.println("target is "+targetDirectory);
 					for(FileHandle file : projectFolder.list()) {
-						if (file.name().startsWith("uiskin.") || (file.extension().equalsIgnoreCase("fnt"))) {
+						boolean isFOnt = file.extension().equalsIgnoreCase("fnt");
+						boolean isJSON = file.extension().equalsIgnoreCase("json");
+						if (file.name().startsWith("uiskin.") || (isFOnt) || isJSON) {
 							Gdx.app.log("MenuBar","Copying file: " + file.name() + " ...");
 							FileHandle target = targetDirectory.child(file.name());
 							file.copyTo(target);
+							//rename in target default font
+							
+							if (isJSON) {
+								String fileData = target.readString();
+								fileData = fileData.replace("default.fnt", settingsFile.readString()+".fnt");
+								target.writeString(fileData, false);
+								System.out.println("Replacing default.fnt =>"+settingsFile.readString()+".fnt");
+								System.out.println(target.readString());
+								
+							}
 						}
 					}
 					game.showNotice("Operation Completed", "Project successfully exported!", game.screenMain.stage);

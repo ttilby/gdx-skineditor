@@ -164,36 +164,14 @@ public class MainScreen implements Screen {
 		}
 		
 		FileHandle projectFile = projectFolder.child("uiskin.json");
-		
-		
-		
+//		//settings file 
+		FileHandle settingsFile = projectFolder.child("uiskin.settings");
 		FileHandle backupFile = projectFolder.child("backups").child("uiskin_" +(TimeUtils.millis()/1000) +".json");
 		projectFile.copyTo(backupFile);
-		
-		Preferences prefs = Gdx.app.getPreferences("editor_prefs_"+game.screenMain.getcurrentProject());
-		FileHandle fh = new FileHandle(prefs.getString("font-override", "default")+".fnt");
-		if (fh.exists()) {
-			game.skinProject.get("default-font", BitmapFont.class).getData().fontFile = fh;
+		if (!settingsFile.exists()) {
+			settingsFile.writeString("default",false);
 		}
-		game.skinProject.save(projectFile);
-//		
-//		
-//		
-//		ObjectMap<String, BitmapFont> all = game.skinProject.getAll(BitmapFont.class);
-//		for (Entry<String	, BitmapFont> entry : all) {
-//			System.out.println("loaded : "+entry.key+" =>"+entry.value);
-//			
-//		}
-		
-		//TODO tutaj trzeba podmienic plik , sciezke w foncie na odpowiedni 
-		System.out.println(game.skinProject.get("default-font", BitmapFont.class).getData().fontFile.path());
-//		game.skinProject.remove("default-font", BitmapFont.class);
-//		BitmapFont font = new BitmapFont(fontFile, imageFile, flip)
-		//TODO FONT PILNE WAZNE , to dziala , 
-//		Preferences prefs = Gdx.app.getPreferences("editor_prefs_"+game.screenMain.getcurrentProject());
-//		game.skinProject.get("default-font", BitmapFont.class).getData().fontFile = new FileHandle(prefs.getString("font-override", "")+".fnt");
-//		
-//		
+		game.skinProject.save(projectFile,projectFolder);
 	}
 	
 	/**
