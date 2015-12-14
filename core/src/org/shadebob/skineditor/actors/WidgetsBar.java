@@ -15,6 +15,7 @@
  ******************************************************************************/
 package org.shadebob.skineditor.actors;
 
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import org.shadebob.skineditor.SkinEditorGame;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
@@ -93,7 +94,7 @@ public class WidgetsBar extends Table {
 	 * 
 	 */
 	public void resetButtonSelection() {
-		group.getButtons().get(0).setChecked(true);
+        ((Button)(group.getButtons().get(0))).setChecked(true);
 	}
 
 }

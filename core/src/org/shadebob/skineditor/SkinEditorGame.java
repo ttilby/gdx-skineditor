@@ -62,7 +62,7 @@ public class SkinEditorGame extends Game {
 	
 	
 	private final static String projectsRawDir 	= ".skineditor_projects";
-	private static String projectsPath 		= "c:/"; //absolute 
+	private static String projectsPath 		= "c:/"; //absolute
 	
 	private static String projectsExportPath = null;
 	
@@ -123,7 +123,7 @@ public class SkinEditorGame extends Game {
 
 			System.out.println("Project dir is  = "+projectsPath);
 			System.out.println("Export dir is = "+projectsExportPath);
-			FileHandle resourceDir = new FileHandle(current).parent().child("assets").child("resources");
+			FileHandle resourceDir = new FileHandle(current).child("assets").child("resources");
 			System.out.println("resourceDir  = "+resourceDir);
 			
 			

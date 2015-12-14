@@ -774,7 +774,7 @@ public class Skin implements Disposable {
 					// Scaled size is the desired cap height to scale
 					// the font to.
 					if (scaledSize != -1)
-						font.setScale(scaledSize / font.getCapHeight());
+						font.getData().setScale(scaledSize / font.getCapHeight());
 					return font;
 				} catch (RuntimeException ex) {
 					throw new SerializationException("Error loading bitmap font: " + fontFile, ex);

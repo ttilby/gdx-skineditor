@@ -12,7 +12,7 @@ allprojects {
     version = "1.0"
     ext {
         appName = "SkinEditor"
-        gdxVersion = "1.0.2-SNAPSHOT"
+        gdxVersion = "1.7.1"
     }
     
     repositories {

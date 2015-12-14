@@ -96,7 +96,8 @@ public class PreviewPane extends Table {
 			ObjectMap<String, ?> styles = game.skinProject.getAll(style);
 			if (styles == null) {
 				Label label = new Label("No styles defined for this widget type", game.skin, "error");
-				add(label).row().pad(10);
+				add(label).pad(10).row();
+
 
 			} else {
 

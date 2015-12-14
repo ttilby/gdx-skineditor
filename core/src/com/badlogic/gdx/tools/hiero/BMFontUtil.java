@@ -34,6 +34,9 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 
+import com.badlogic.gdx.scenes.scene2d.ui.Value;
+import com.badlogic.gdx.tools.hiero.unicodefont.effects.ConfigurableEffect;
+import com.badlogic.gdx.utils.IntIntMap;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -142,23 +145,26 @@ public class BMFontUtil {
 			class KerningPair {
 				public int firstCodePoint, secondCodePoint, offset;
 			}
+            int kerningCount = 0;
 			for (Iterator iter1 = allGlyphs.iterator(); iter1.hasNext();) {
 				Glyph firstGlyph = (Glyph)iter1.next();
 				int firstGlyphCode = getGlyphCode(font, firstGlyph.getCodePoint());
-				int[] values = kerning.getValues(firstGlyphCode);
+				IntIntMap.Values values = kerning.getKernings().values(); //kerning.getValues(firstGlyphCode);
 				if (values == null) continue;
-				for (int i = 0; i < values.length; i++) {
-					Integer secondCodePoint = (Integer)glyphCodeToCodePoint.get(new Integer(values[i] & 0xffff));
-					if (secondCodePoint == null) continue; // We may not be outputting the second character.
-					int offset = values[i] >> 16;
-					KerningPair pair = new KerningPair();
-					pair.firstCodePoint = firstGlyph.getCodePoint();
-					pair.secondCodePoint = secondCodePoint.intValue();
-					pair.offset = offset;
-					kernings.add(pair);
-				}
+                while(values.hasNext()){
+                    kerningCount++;
+                    int value = values.next();
+                    Integer secondCodePoint = (Integer)glyphCodeToCodePoint.get(new Integer(value & 0xffff));
+                    if (secondCodePoint == null) continue; // We may not be outputting the second character.
+                    int offset = value >> 16;
+                    KerningPair pair = new KerningPair();
+                    pair.firstCodePoint = firstGlyph.getCodePoint();
+                    pair.secondCodePoint = secondCodePoint.intValue();
+                    pair.offset = offset;
+                    kernings.add(pair);
+                }
 			}
-			out.println("kernings count=" + kerning.getCount());
+			out.println("kernings count=" + kerningCount);
 			for (Iterator iter = kernings.iterator(); iter.hasNext();) {
 				KerningPair pair = (KerningPair)iter.next();
 				out.println("kerning first=" + pair.firstCodePoint + "  second=" + pair.secondCodePoint + "  amount=" + pair.offset);
